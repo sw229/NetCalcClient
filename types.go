@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-// "Enum" containing types of operations
+// Enum containing types of operations
 const (
 	Add = iota + 1
 	Sub
@@ -18,30 +18,26 @@ const (
 	Root
 )
 
-// Struct containing info about server
-type CalcClient struct {
-	Protocol      string
-	ServerAddress string
-	ServerPort    string
+// Struct containing calculator settings
+type Settings struct {
+	ServerProtocol   string
+	ServerIP         string
+	serverPort       string
+	Username         string
+	Password         string
+	CalculateLocally bool
 }
 
 // Struct containing info about current operation
 type Calc struct {
-	Op         int
-	OperandX   float64
-	OperandY   float64
-	LastResult float64
-	FirstOp    bool
-}
-
-// Constructor for CalcClient struct
-func newCalcClient(protocol, serverAddress, serverPort string) CalcClient {
-	return CalcClient{protocol, serverAddress, serverPort}
+	Expression string
+	Result     string
+	CurrentOp  int
 }
 
 // Function sends request to calculator server
 // Function requires the operands and operation type listed in the enum
-func (c CalcClient) operation(op int, x, y float64) (float64, error) {
+func (settings Settings) operation(op int, x, y float64) (float64, error) {
 	var opStr string
 	switch op {
 	case 1:
@@ -59,7 +55,7 @@ func (c CalcClient) operation(op int, x, y float64) (float64, error) {
 	default:
 		return 0, errors.New("Invalid operation")
 	}
-	resp, err := http.Get(fmt.Sprintf("%s://%s:%s/%s?x=%g&y=%g", c.Protocol, c.ServerAddress, c.ServerPort, opStr, x, y))
+	resp, err := http.Get(fmt.Sprintf("%s://%s:%s/%s?x=%g&y=%g", settings.ServerProtocol, settings.ServerIP, settings.serverPort, opStr, x, y))
 	if err != nil {
 		return 0, err
 	}
