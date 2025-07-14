@@ -228,27 +228,45 @@ func initMainWindow() {
 
 // Window containing connection options (server IP, port, username, etc.)
 func initOptionsWindow(a fyne.App) {
-	optionsWindow := a.NewWindow("Network options")
-	optionsWindow.Resize(fyne.NewSize(640, 480))
+	optionsWindow := a.NewWindow("Options")
+	optionsWindow.Resize(fyne.NewSize(218, 245))
 	// Entry for server IP
+	serverAddressLabel := widget.NewLabel("Server address and port:")
+	serverAddressLabel.Move(fyne.NewPos(-5, -10))
+	semicololLabel := widget.NewLabel(":")
+	semicololLabel.Move(fyne.NewPos(145, 19))
 	serverAddressField := widget.NewEntry()
-	serverAddressField.Resize(fyne.NewSize(50, 36))
+	serverAddressField.Resize(fyne.NewSize(150, 36))
+	serverAddressField.Move(fyne.NewPos(0, 20))
 	serverAddressField.Text = settings.ServerIP
+	serverAddressField.Refresh()
 	// Entry for server port
 	serverPortField := widget.NewEntry()
 	serverPortField.Resize(fyne.NewSize(50, 36))
+	serverPortField.Move(fyne.NewPos(160, 20))
 	serverPortField.Text = settings.serverPort
+	serverPortField.Refresh()
 	// Username field
+	usernameLabel := widget.NewLabel("Username:")
+	usernameLabel.Move(fyne.NewPos(-5, 50))
 	usernameField := widget.NewEntry()
-	usernameField.Resize(fyne.NewSize(50, 36))
+	usernameField.Resize(fyne.NewSize(210, 36))
+	usernameField.Move(fyne.NewPos(0, 80))
 	usernameField.Text = settings.Username
 	// Password field
+	passwordLabel := widget.NewLabel("Password:")
+	passwordLabel.Move(fyne.NewPos(-5, 110))
 	passwordField := widget.NewEntry()
-	passwordField.Resize(fyne.NewSize(50, 36))
+	passwordField.Resize(fyne.NewSize(210, 36))
+	passwordField.Move(fyne.NewPos(0, 140))
 	passwordField.Text = settings.Password
 	// Checkbox for setting wether client does the calculations locally or uses a server
-	localCalcCheckbox := widget.NewCheck("Calculate locally", func(checked bool) {})
+	localCalcCheckbox := widget.NewCheck("Calculate locally", func(checked bool) {
+		settings.CalculateLocally = checked
+	})
 	localCalcCheckbox.Checked = settings.CalculateLocally
+	localCalcCheckbox.Resize(fyne.NewSize(36, 36))
+	localCalcCheckbox.Move(fyne.NewPos(-5, 170))
 	// Button to apply settings
 	applyButton := widget.NewButton("ok", func() {
 		settings.ServerIP = serverAddressField.Text
@@ -258,16 +276,22 @@ func initOptionsWindow(a fyne.App) {
 		optionsWindow.Close()
 	})
 	applyButton.Resize(fyne.NewSize(50, 36))
+	applyButton.Move(fyne.NewPos(105, 200))
 	// Button to cancel settings
 	cancelButton := widget.NewButton("cancel", func() {
 		optionsWindow.Close()
 	})
 	cancelButton.Resize(fyne.NewSize(50, 36))
+	cancelButton.Move(fyne.NewPos(160, 200))
 
 	content := container.NewWithoutLayout(
+		serverAddressLabel,
+		semicololLabel,
 		serverAddressField,
 		serverPortField,
+		usernameLabel,
 		usernameField,
+		passwordLabel,
 		passwordField,
 		localCalcCheckbox,
 		applyButton,
