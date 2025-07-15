@@ -32,73 +32,119 @@ func initMainWindow() {
 	standardSize := fyne.NewSize(buttonWidth, buttonHeight)
 	doubleWideSize := fyne.NewSize(buttonWidth*2+buttonGap, buttonHeight)
 	doubleHighSize := fyne.NewSize(buttonWidth, buttonHeight*2+buttonGap)
-	//calcClient := newCalcClient("http", "127.0.0.1", "8080")
+
 	a := app.New()
 	mainWindow := a.NewWindow("calc")
 	mainWindow.Resize(fyne.NewSize(windowWidth, windowHeight))
-	typingField := widget.NewEntry()
-	typingField.Resize(fyne.NewSize(actualWindowWidth, 36))
-	divButton := widget.NewButton("/", func() { // Finish this and put in a separate function
 
-	})
+	// Label that shows expression that is being typed
+	expressionField := widget.NewLabel("")
+	expressionFieldDefaultPos := fyne.NewPos(250, 0)
+	expressionField.Move(expressionFieldDefaultPos)
+	expressionField.TextStyle.Bold = true
+
+	// Label showing result of the expression
+	resultField := widget.NewLabel("")
+	resultFieldDefaultPos := fyne.NewPos(250, 40)
+	resultField.Move(resultFieldDefaultPos)
+	resultField.TextStyle.Bold = true
 
 	// Addition
-	addButton := widget.NewButton("+", func() {})
+	addButton := widget.NewButton("+", func() {
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = setOpCharacter(expressionField.Text, "+")
+			expressionField.Refresh()
+			setPosition(expressionField, expressionFieldDefaultPos)
+		}
+	})
 	addButton.Resize(doubleHighSize)
 	addButton.Move(fyne.NewPos(buttonXPos4, buttonYPos2))
 
 	// Subtraction
-	subButton := widget.NewButton("-", func() {})
+	subButton := widget.NewButton("-", func() {
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = setOpCharacter(expressionField.Text, "-")
+			expressionField.Refresh()
+			setPosition(expressionField, expressionFieldDefaultPos)
+		}
+	})
 	subButton.Resize(standardSize)
 	subButton.Move(fyne.NewPos(buttonXPos4, buttonYPos1))
 
 	// Multiplication
-	mulButton := widget.NewButton("*", func() {})
+	mulButton := widget.NewButton("*", func() {
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = setOpCharacter(expressionField.Text, "*")
+			expressionField.Refresh()
+			setPosition(expressionField, expressionFieldDefaultPos)
+		}
+	})
 	mulButton.Resize(standardSize)
 	mulButton.Move(fyne.NewPos(buttonXPos3, buttonYPos1))
 
 	// Division
+	divButton := widget.NewButton("/", func() {
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = setOpCharacter(expressionField.Text, "/")
+			expressionField.Refresh()
+			setPosition(expressionField, expressionFieldDefaultPos)
+		}
+	})
 	divButton.Resize(standardSize)
 	divButton.Move(fyne.NewPos(buttonXPos2, buttonYPos1))
 
 	// Percentage
 	percentButton := widget.NewButton("%", func() {
-		typingField.Text = typingField.Text + "%"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "%"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	percentButton.Resize(standardSize)
 	percentButton.Move(fyne.NewPos(buttonXPos1, buttonYPos1))
 
 	// Decimal point
 	decPointButton := widget.NewButton(".", func() {
-		typingField.Text = typingField.Text + "."
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 && !hasDecPoint(expressionField.Text) {
+			expressionField.Text = expressionField.Text + "."
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	decPointButton.Resize(standardSize)
 	decPointButton.Move(fyne.NewPos(buttonXPos3, buttonYPos5))
 
 	// Parenthesis
 	parenthesisLeftButton := widget.NewButton("(", func() {
-		// Add something here
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "("
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	parenthesisLeftButton.Resize(standardSize)
 	parenthesisLeftButton.Move(fyne.NewPos(buttonXPos5, buttonYPos3))
 
 	parenthesisRightButton := widget.NewButton(")", func() {
-		// Add something here
+		if len(expressionField.Text) <= 29 && canAddClosingParenthesis(expressionField.Text) {
+			expressionField.Text = expressionField.Text + ")"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	parenthesisRightButton.Resize(standardSize)
 	parenthesisRightButton.Move(fyne.NewPos(buttonXPos5, buttonYPos4))
 
-	// Switching + and -
+	// Switching + and -  DOES NOT WORK
 	togglePosNegButton := widget.NewButton("+/-", func() {
-		if typingField.Text != "" {
-			if typingField.Text[0] == '-' {
-				typingField.Text = typingField.Text[1:]
+		if expressionField.Text != "" {
+			if expressionField.Text[0] == '-' {
+				expressionField.Text = expressionField.Text[1:]
 			} else {
-				typingField.Text = "-" + typingField.Text
+				expressionField.Text = "-" + expressionField.Text
 			}
-			typingField.Refresh()
+			expressionField.Refresh()
 		}
 	})
 	togglePosNegButton.Resize(standardSize)
@@ -120,85 +166,117 @@ func initMainWindow() {
 
 	// Clear input
 	clearButton := widget.NewButton("C", func() {
-		typingField.Text = ""
-		typingField.Refresh()
+		expressionField.Text = ""
+		setPosition(expressionField, expressionFieldDefaultPos)
+		expressionField.Refresh()
 	})
 	clearButton.Resize(standardSize)
 	clearButton.Move(fyne.NewPos(buttonXPos5, buttonYPos2))
 
 	// Digits
 	zeroButton := widget.NewButton("0", func() {
-		typingField.Text = typingField.Text + "0"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "0"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	zeroButton.Resize(doubleWideSize)
 	zeroButton.Move(fyne.NewPos(buttonXPos1, buttonYPos5))
 
 	oneButton := widget.NewButton("1", func() {
-		typingField.Text = typingField.Text + "1"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "1"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	oneButton.Resize(standardSize)
 	oneButton.Move(fyne.NewPos(buttonXPos1, buttonYPos4))
 
 	twoButton := widget.NewButton("2", func() {
-		typingField.Text = typingField.Text + "2"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "2"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	twoButton.Resize(standardSize)
 	twoButton.Move(fyne.NewPos(buttonXPos2, buttonYPos4))
 
 	threeButton := widget.NewButton("3", func() {
-		typingField.Text = typingField.Text + "3"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "3"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	threeButton.Resize(standardSize)
 	threeButton.Move(fyne.NewPos(buttonXPos3, buttonYPos4))
 
 	fourButton := widget.NewButton("4", func() {
-		typingField.Text = typingField.Text + "4"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "4"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	fourButton.Resize(standardSize)
 	fourButton.Move(fyne.NewPos(buttonXPos1, buttonYPos3))
 
 	fiveButton := widget.NewButton("5", func() {
-		typingField.Text = typingField.Text + "5"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "5"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	fiveButton.Resize(standardSize)
 	fiveButton.Move(fyne.NewPos(buttonXPos2, buttonYPos3))
 
 	sixButton := widget.NewButton("6", func() {
-		typingField.Text = typingField.Text + "6"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "6"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	sixButton.Resize(standardSize)
 	sixButton.Move(fyne.NewPos(buttonXPos3, buttonYPos3))
 
 	sevenButton := widget.NewButton("7", func() {
-		typingField.Text = typingField.Text + "7"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "7"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	sevenButton.Resize(standardSize)
 	sevenButton.Move(fyne.NewPos(buttonXPos1, buttonYPos2))
 
 	eightButton := widget.NewButton("8", func() {
-		typingField.Text = typingField.Text + "8"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "8"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	eightButton.Resize(standardSize)
 	eightButton.Move(fyne.NewPos(buttonXPos2, buttonYPos2))
 
 	nineButton := widget.NewButton("9", func() {
-		typingField.Text = typingField.Text + "9"
-		typingField.Refresh()
+		if len(expressionField.Text) <= 29 {
+			expressionField.Text = expressionField.Text + "9"
+			setPosition(expressionField, expressionFieldDefaultPos)
+			expressionField.Refresh()
+		}
 	})
 	nineButton.Resize(standardSize)
 	nineButton.Move(fyne.NewPos(buttonXPos3, buttonYPos2))
 
 	content := container.NewWithoutLayout(
-		typingField,
+		expressionField,
+		resultField,
 		sevenButton,
 		eightButton,
 		nineButton,

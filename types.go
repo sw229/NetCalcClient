@@ -37,7 +37,7 @@ type Calc struct {
 
 // Function sends request to calculator server
 // Function requires the operands and operation type listed in the enum
-func (settings Settings) operation(op int, x, y float64) (float64, error) {
+func operation(op int, x, y float64) (float64, error) {
 	var opStr string
 	switch op {
 	case 1:
