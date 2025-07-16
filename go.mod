@@ -2,7 +2,10 @@ module github.com/sw229/net_calc_client
 
 go 1.24.4
 
-require fyne.io/fyne/v2 v2.6.1
+require (
+	fyne.io/fyne/v2 v2.6.1
+	github.com/Knetic/govaluate v3.0.0+incompatible
+)
 
 require (
 	fyne.io/systray v1.11.0 // indirect

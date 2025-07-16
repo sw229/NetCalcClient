@@ -152,7 +152,10 @@ func initMainWindow() {
 
 	// Button to execute operation
 	exeButton := widget.NewButton("=", func() {
-		initOptionsWindow(a)
+		err := calculate(expressionField, resultField, resultFieldDefaultPos)
+		if err != nil {
+			// Add error handling
+		}
 	})
 	exeButton.Resize(doubleHighSize)
 	exeButton.Move(fyne.NewPos(buttonXPos4, buttonYPos4))
@@ -179,6 +182,10 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "0"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
 	zeroButton.Resize(doubleWideSize)
@@ -189,6 +196,10 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "1"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
 	oneButton.Resize(standardSize)
@@ -199,6 +210,10 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "2"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
 	twoButton.Resize(standardSize)
@@ -209,6 +224,10 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "3"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
 	threeButton.Resize(standardSize)
@@ -219,6 +238,10 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "4"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
 	fourButton.Resize(standardSize)
@@ -229,6 +252,10 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "5"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
 	fiveButton.Resize(standardSize)
@@ -239,6 +266,10 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "6"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
 	sixButton.Resize(standardSize)
@@ -249,6 +280,10 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "7"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
 	sevenButton.Resize(standardSize)
@@ -259,6 +294,10 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "8"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
 	eightButton.Resize(standardSize)
@@ -269,6 +308,10 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "9"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
 	nineButton.Resize(standardSize)

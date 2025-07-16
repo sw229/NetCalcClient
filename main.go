@@ -9,7 +9,7 @@ func main() {
 	settings = Settings{
 		ServerIP:         "127.0.0.1",
 		serverPort:       "8080",
-		CalculateLocally: false,
+		CalculateLocally: true,
 	}
 	initMainWindow()
 }

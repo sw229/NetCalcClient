@@ -1,11 +1,57 @@
 package main
 
 import (
+	"encoding/base64"
+	"fmt"
+	"io"
+	"net/http"
 	"unicode"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
+	"github.com/Knetic/govaluate"
 )
+
+// Function that calculates the expression in expressionField.Text
+// If CalculateLocally is set to true, the client does calculations by itsself. Othervise it sends the request to specified server
+// If an error is encountered, resultField.Text is set to empty string. The error is returned from the function
+func calculate(expField, resultField *widget.Label, resultFieldDefaultPos fyne.Position) error {
+	if settings.CalculateLocally {
+		exp, err := govaluate.NewEvaluableExpression(expField.Text)
+		if err != nil {
+			resultField.Text = ""
+			setPosition(resultField, resultFieldDefaultPos)
+			resultField.Refresh()
+			return err
+		}
+		result, err := exp.Evaluate(nil)
+		resultField.Text = fmt.Sprint(result)
+		setPosition(resultField, resultFieldDefaultPos)
+		resultField.Refresh()
+		return nil
+	}
+
+	encodedExp := base64.URLEncoding.EncodeToString([]byte(expField.Text))
+	resp, err := http.Get(fmt.Sprintf("%s://%s:%s?exp=%s", settings.ServerProtocol, settings.ServerIP, settings.serverPort, encodedExp))
+	if err != nil {
+		resultField.Text = ""
+		setPosition(resultField, resultFieldDefaultPos)
+		resultField.Refresh()
+		return err
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		resultField.Text = ""
+		setPosition(resultField, resultFieldDefaultPos)
+		resultField.Refresh()
+		return err
+	}
+	resultField.Text = string(body)
+	setPosition(resultField, resultFieldDefaultPos)
+	resultField.Refresh()
+	return nil
+}
 
 // Function to move a label left as length of its content changes
 // Function returns false if label goes over the boundary of the window
