@@ -93,16 +93,20 @@ func initMainWindow() {
 	divButton.Resize(standardSize)
 	divButton.Move(fyne.NewPos(buttonXPos2, buttonYPos1))
 
-	// Percentage
-	percentButton := widget.NewButton("%", func() {
-		if len(expressionField.Text) <= 29 {
-			expressionField.Text = expressionField.Text + "%"
+	// Button removes last character in expressionField
+	delButton := widget.NewButton("del", func() {
+		if len(expressionField.Text) > 0 {
+			expressionField.Text = expressionField.Text[:len(expressionField.Text)-1]
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			err := calculate(expressionField, resultField, resultFieldDefaultPos)
+			if err != nil {
+				// Add error handling
+			}
 		}
 	})
-	percentButton.Resize(standardSize)
-	percentButton.Move(fyne.NewPos(buttonXPos1, buttonYPos1))
+	delButton.Resize(standardSize)
+	delButton.Move(fyne.NewPos(buttonXPos1, buttonYPos1))
 
 	// Decimal point
 	decPointButton := widget.NewButton(".", func() {
@@ -341,7 +345,7 @@ func initMainWindow() {
 		parenthesisRightButton,
 		togglePosNegButton,
 		divButton,
-		percentButton,
+		delButton,
 	)
 	mainWindow.SetContent(content)
 	mainWindow.ShowAndRun()

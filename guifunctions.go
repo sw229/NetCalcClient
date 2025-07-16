@@ -25,7 +25,11 @@ func calculate(expField, resultField *widget.Label, resultFieldDefaultPos fyne.P
 			return err
 		}
 		result, err := exp.Evaluate(nil)
-		resultField.Text = fmt.Sprint(result)
+		if fmt.Sprint(result) == "<nil>" {
+			resultField.Text = ""
+		} else {
+			resultField.Text = fmt.Sprint(result)
+		}
 		setPosition(resultField, resultFieldDefaultPos)
 		resultField.Refresh()
 		return nil
