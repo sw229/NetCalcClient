@@ -1,5 +1,11 @@
 package main
 
+import "embed"
+
+//go:embed calc_icon.png
+//go:embed settings_icon.png
+var embedFS embed.FS
+
 var (
 	settings   Settings
 	calculator Calc

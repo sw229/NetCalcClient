@@ -29,6 +29,10 @@ func initMainWindow() {
 		buttonYPos4        = keyboardYOffset + buttonHeight*3 + buttonGap*3
 		buttonYPos5        = keyboardYOffset + buttonHeight*4 + buttonGap*4
 	)
+
+	calcIconData, _ := embedFS.ReadFile("calc_icon.png")
+	calcIcon := fyne.NewStaticResource("calc_icon", calcIconData)
+
 	standardSize := fyne.NewSize(buttonWidth, buttonHeight)
 	doubleWideSize := fyne.NewSize(buttonWidth*2+buttonGap, buttonHeight)
 	doubleHighSize := fyne.NewSize(buttonWidth, buttonHeight*2+buttonGap)
@@ -36,8 +40,9 @@ func initMainWindow() {
 	a := app.New()
 	mainWindow := a.NewWindow("calc")
 	mainWindow.Resize(fyne.NewSize(windowWidth, windowHeight))
+	mainWindow.SetIcon(calcIcon)
 
-	// Label that shows expression that is being typed
+	// Label showing expression that is being typed
 	expressionField := widget.NewLabel("")
 	expressionFieldDefaultPos := fyne.NewPos(250, 0)
 	expressionField.Move(expressionFieldDefaultPos)
@@ -125,6 +130,7 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + "("
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			calculate(expressionField, resultField, resultFieldDefaultPos)
 		}
 	})
 	parenthesisLeftButton.Resize(standardSize)
@@ -135,6 +141,7 @@ func initMainWindow() {
 			expressionField.Text = expressionField.Text + ")"
 			setPosition(expressionField, expressionFieldDefaultPos)
 			expressionField.Refresh()
+			calculate(expressionField, resultField, resultFieldDefaultPos)
 		}
 	})
 	parenthesisRightButton.Resize(standardSize)
@@ -174,8 +181,11 @@ func initMainWindow() {
 	// Clear input
 	clearButton := widget.NewButton("C", func() {
 		expressionField.Text = ""
+		resultField.Text = ""
 		setPosition(expressionField, expressionFieldDefaultPos)
+		setPosition(resultField, resultFieldDefaultPos)
 		expressionField.Refresh()
+		resultField.Refresh()
 	})
 	clearButton.Resize(standardSize)
 	clearButton.Move(fyne.NewPos(buttonXPos5, buttonYPos2))
@@ -353,8 +363,13 @@ func initMainWindow() {
 
 // Window containing connection options (server IP, port, username, etc.)
 func initOptionsWindow(a fyne.App) {
+	settingsIconData, _ := embedFS.ReadFile("settings_icon.png")
+	settingsIcon := fyne.NewStaticResource("settings_icon", settingsIconData)
+
 	optionsWindow := a.NewWindow("Options")
 	optionsWindow.Resize(fyne.NewSize(218, 245))
+	optionsWindow.SetIcon(settingsIcon)
+
 	// Entry for server IP
 	serverAddressLabel := widget.NewLabel("Server address and port:")
 	serverAddressLabel.Move(fyne.NewPos(-5, -10))
