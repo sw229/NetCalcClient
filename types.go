@@ -21,7 +21,10 @@ type Settings struct {
 }
 
 // Struct containing info about current operation
-type Calc struct {
+// Calculated field is set to true when exeButton (=) is clicked
+// If Calculated is true the next typed number overwrites expressionField.Text
+type CalcState struct {
+	Calculated bool
 	Expression string
 	Result     string
 	CurrentOp  int

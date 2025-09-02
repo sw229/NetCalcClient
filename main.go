@@ -7,8 +7,8 @@ import "embed"
 var embedFS embed.FS
 
 var (
-	settings   Settings
-	calculator Calc
+	settings        Settings
+	calculatorState CalcState
 )
 
 func main() {

@@ -73,6 +73,9 @@ func setPosition(l *widget.Label, defaultPos fyne.Position) bool {
 // it is replaced with the one passed to the function
 func setOpCharacter(exp string, char string) string {
 	if exp == "" {
+		if char == "-" {
+			exp += char
+		}
 		return exp
 	}
 	if unicode.IsDigit(rune(exp[len(exp)-1])) || exp[len(exp)-1] == '%' || exp[len(exp)-1] == ')' || (exp[len(exp)-1] == '(' && (char == "+" || char == "-")) {
