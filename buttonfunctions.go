@@ -20,10 +20,7 @@ func calcNumButtonFunc(buttonLabel string, expressionField, resultField *widget.
 		expressionField.Text = expressionField.Text + buttonLabel
 		setPosition(expressionField, expressionFieldDefaultPos)
 		expressionField.Refresh()
-		err := calculate(expressionField, resultField, resultFieldDefaultPos)
-		if err != nil {
-			// Add error handling
-		}
+		calculate(expressionField, resultField, resultFieldDefaultPos)
 	}
 }
 
@@ -33,10 +30,7 @@ func calcDecPointButtonFunc(expressionField, resultField *widget.Label, expressi
 		expressionField.Text = expressionField.Text + "."
 		setPosition(expressionField, expressionFieldDefaultPos)
 		expressionField.Refresh()
-		err := calculate(expressionField, resultField, resultFieldDefaultPos)
-		if err != nil {
-			// Add error handling
-		}
+		calculate(expressionField, resultField, resultFieldDefaultPos)
 		calculatorState.Calculated = false
 	}
 }
@@ -75,10 +69,7 @@ func calcParRightButtonFunc(expressionField, resultField *widget.Label, expressi
 
 // Function called when exeButton is clicked
 func calcExeButtonFunc(expressionField, resultField *widget.Label, expressionFieldDefaultPos, resultFieldDefaultPos fyne.Position) {
-	err := calculate(expressionField, resultField, resultFieldDefaultPos)
-	if err != nil {
-		// Add error handling
-	}
+	calculate(expressionField, resultField, resultFieldDefaultPos)
 	expressionField.Text = resultField.Text
 	setPosition(expressionField, expressionFieldDefaultPos)
 	expressionField.Refresh()
@@ -86,6 +77,17 @@ func calcExeButtonFunc(expressionField, resultField *widget.Label, expressionFie
 	setPosition(resultField, resultFieldDefaultPos)
 	resultField.Refresh()
 	calculatorState.Calculated = true
+}
+
+// Function called when clearButton is clicked
+func calcClearButtonFunc(expressionField, resultField *widget.Label, expressionFieldDefaultPos, resultFieldDefaultPos fyne.Position) {
+	expressionField.Text = ""
+	resultField.Text = ""
+	setPosition(expressionField, expressionFieldDefaultPos)
+	setPosition(resultField, resultFieldDefaultPos)
+	expressionField.Refresh()
+	resultField.Refresh()
+	calculatorState.Calculated = false
 }
 
 // Function called when TogglePosNegButton is clicked
@@ -108,10 +110,7 @@ func calcDelButtonFunc(expressionField, resultField *widget.Label, expressionFie
 		expressionField.Text = expressionField.Text[:len(expressionField.Text)-1]
 		setPosition(expressionField, expressionFieldDefaultPos)
 		expressionField.Refresh()
-		err := calculate(expressionField, resultField, resultFieldDefaultPos)
-		if err != nil {
-			// Add error handling
-		}
+		calculate(expressionField, resultField, resultFieldDefaultPos)
 	}
 	calculatorState.Calculated = false
 }

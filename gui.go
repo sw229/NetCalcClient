@@ -132,13 +132,7 @@ func initMainWindow() {
 
 	// Clear input
 	clearButton := widget.NewButton("C", func() {
-		expressionField.Text = ""
-		resultField.Text = ""
-		setPosition(expressionField, expressionFieldDefaultPos)
-		setPosition(resultField, resultFieldDefaultPos)
-		expressionField.Refresh()
-		resultField.Refresh()
-		calculatorState.Calculated = false
+		calcClearButtonFunc(expressionField, resultField, expressionFieldDefaultPos, resultFieldDefaultPos)
 	})
 	clearButton.Resize(standardSize)
 	clearButton.Move(fyne.NewPos(buttonXPos5, buttonYPos2))

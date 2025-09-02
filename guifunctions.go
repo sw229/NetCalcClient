@@ -96,6 +96,7 @@ func hasDecPoint(exp string) bool {
 	return false
 }
 
+// Function checks if closing parenthesis can be added
 func canAddClosingParenthesis(exp string) bool {
 	var count int
 	for _, char := range exp {
