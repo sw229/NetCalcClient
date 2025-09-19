@@ -6,16 +6,17 @@ import "embed"
 //go:embed settings_icon.png
 var embedFS embed.FS
 
-var (
-	settings        Settings
-	calculatorState CalcState
-)
-
 func main() {
+	var (
+		settings        Settings
+		calculatorState CalcState
+	)
+
 	settings = Settings{
 		ServerIP:         "127.0.0.1",
 		serverPort:       "8080",
+		ServerProtocol:   "http",
 		CalculateLocally: true,
 	}
-	initMainWindow()
+	initMainWindow(&settings, &calculatorState)
 }
